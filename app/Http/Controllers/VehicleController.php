@@ -14,6 +14,7 @@ class VehicleController extends Controller
         $vehicles = Vehicle::all();
         return response()->json(['message' => 'vehicles listed successfully', 'vehicles' => $vehicles]);
     }
+
     public function availableVehicles(Request $request)
     {
         $availableVehicles = Vehicle::whereDoesntHave('booking', function ($query) use ($request) {
@@ -31,7 +32,7 @@ class VehicleController extends Controller
 //        $availableVehicles = Vehicle::whereDoesntHave('booking', function ($query) use ($request) {
 //            $query->whereNotBetween('end_date', [$request->end_date, $request->start_date])->whereNotBetween('start_date',[$request->end_date, $request->start_date]);
 //      })->get();
-        return response()->json(['message' => 'vehicles listed successfully', 'available vehicles' => $availableVehicles]);
+        return response()->json(['message' => 'vehicles listed successfully', 'available_vehicles' => $availableVehicles]);
     }
 
     public function store(Request $request)
