@@ -15,6 +15,7 @@ class PaymentController extends Controller
         $payments = Payment::all();
         return response()->json(['message' => 'payments listed successfully', 'payments' => $payments]);
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
