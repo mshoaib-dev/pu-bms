@@ -37,6 +37,7 @@ class PaymentController extends Controller
         };
 
         $payment = Payment::create($request->all());
+
         if ($payment->status === 'paid') {
             $booking = $payment->booking;
             $booking->update(['status' => 'paid']);
