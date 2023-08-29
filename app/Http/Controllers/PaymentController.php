@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 
-
 class PaymentController extends Controller
 {
     public function index()
@@ -15,6 +14,7 @@ class PaymentController extends Controller
         $payments = Payment::all();
         return response()->json(['message' => 'payments listed successfully', 'payments' => $payments]);
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -37,6 +37,11 @@ class PaymentController extends Controller
         };
 
         $payment = Payment::create($request->all());
+        if ($payment->status === 'paid') {
+            $booking = $payment->booking;
+            $booking->update(['status' => 'paid']);
+        }
+        $payment->save();
         $payment->file_upload = '/storage/app/public/' . $path;
 //        $payment->file_name = $imageName;
         $payment->save();
@@ -46,6 +51,7 @@ class PaymentController extends Controller
             201);
 
     }
+
     public function show($booking_id)
     {
         $payment = Payment::where('booking_id', $booking_id)->get();
@@ -64,7 +70,10 @@ class PaymentController extends Controller
 
         $payment = Payment::where('booking_id', $id)->first();
         $payment->update($request->all());
-
+        if ($payment->status === 'verified') {
+            $booking = $payment->booking;
+            $booking->update(['status' => 'verified']);
+        }
         return response()->json(['message' => 'payment updated successfully', 'payment' => $payment]);
     }
     public function destroy($id)

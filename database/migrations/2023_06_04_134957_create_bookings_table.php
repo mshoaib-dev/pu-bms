@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('vehicle_id')->unsigned()->index()->nullable();
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->string('status')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->string('phone_no')->nullable();
