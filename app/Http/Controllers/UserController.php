@@ -25,6 +25,7 @@ class UserController extends Controller
         }
 
         $user = User::firstOrCreate([
+
             'email' => $request->email,
         ],[
             'full_name' => $request->full_name,
@@ -32,10 +33,9 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'type' => 'customer',
         ]);
-        $token = "Bearer ".$user->createToken('api_token')->accessToken;
         $user->save();
         return response()->json([
-            'message' => 'User registered successfully','user'=> $user, 'token'=> $token],
+            'message' => 'User registered successfully','user'=> $user],
             201);
     }
     public function login(Request $request)
@@ -52,6 +52,7 @@ class UserController extends Controller
             $user = Auth::user();
             $token = "Bearer ".$user->createToken('api_token')->accessToken;
             return response()->json([
+                'message' => 'user login successfully',
                 'token' => $token,
                 'user' => $user,
             ]);
@@ -83,7 +84,16 @@ class UserController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $driver = User::create($request->all());
+//        $driver = User::create($request->all());
+        $driver = User::firstOrCreate([
+
+            'email' => $request->email,
+        ],[
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => $request->type,
+        ]);
         $driver->save();
         $driver->vehicle()->attach($request->vehicle_id);
         return response()->json([
@@ -99,7 +109,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|min:3|max:75',
-            'email' => 'required|string|email|unique:users|max:255',
+            'email' => 'required',
             'password' => ['required', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'type' => 'required|string',
         ]);

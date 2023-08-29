@@ -15,14 +15,12 @@ class DatabaseSeeder extends Seeder
     public function run()
 
     {
-//        $this->call(BookingSeeder::class);
-//        $this->call(VehicleSeeder::class);
 
         \App\Models\User::create([
              'full_name' => 'Danish Arif',
              'email' => 'danisharif@pu.edu.pk',
              'password' => Hash::make('danish123'),
-             'type' => 'Admin',
+             'type' => 'admin',
          ]);
     }
 }

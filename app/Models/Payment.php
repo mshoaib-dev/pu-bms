@@ -15,9 +15,7 @@ class Payment extends Model
         'booking_id',
         'payment_method',
         'file_upload',
-        'account_title',
-        'account_number',
-//        'status',
+        'status',
     ];
     public function booking()
     {

@@ -29,9 +29,7 @@ class VehicleController extends Controller
                 ['end_date', '<=', $request->end_date]
             ]);
       })->get();
-//        $availableVehicles = Vehicle::whereDoesntHave('booking', function ($query) use ($request) {
-//            $query->whereNotBetween('end_date', [$request->end_date, $request->start_date])->whereNotBetween('start_date',[$request->end_date, $request->start_date]);
-//      })->get();
+
         return response()->json(['message' => 'vehicles listed successfully', 'available_vehicles' => $availableVehicles]);
     }
 
@@ -50,8 +48,6 @@ class VehicleController extends Controller
 
         $vehicle = Vehicle::create($request->all());
         $vehicle->save();
-//        $vehicle->booking()->attach($request->booking_id);
-//        $vehicle->user()->attach($request->user_id);
         return response()->json([
             'message' => 'vehicle created successfully', 'vehicle' => $vehicle],
             201);

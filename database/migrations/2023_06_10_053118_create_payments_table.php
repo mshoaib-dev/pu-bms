@@ -19,9 +19,7 @@ return new class extends Migration
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
             $table->string('payment_method');
             $table->string('file_upload');
-            $table->string('account_title');
-            $table->integer('account_number');
-            $table->enum('status', ['paid', 'verified'])->default('paid');
+            $table->string('status')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

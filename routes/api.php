@@ -25,13 +25,14 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth.api'
 
 Route::middleware('auth.api')->group(function () {
 
-    Route::resource('/users', UserController::class);
-    Route::resource('/bookings', BookingController::class);
     Route::post('/bookings/{id}', [BookingController::class, 'update']);
     Route::post('/payments/{id}', [PaymentController::class, 'update']);
+    Route::post('/vehicles/{id}', [VehicleController::class, 'update']);
+    Route::post('/users/{id}', [UserController::class, 'update']);
+    Route::resource('/bookings', BookingController::class);
     Route::resource('/vehicles', VehicleController::class);
     Route::resource('/payments', PaymentController::class);
-
+    Route::resource('/users', UserController::class);
 
     Route::get('/available/vehicles', [VehicleController::class, 'availableVehicles']);
     Route::post('/vehicles/assigned', [VehicleController::class, 'assignedVehicle']);

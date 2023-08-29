@@ -16,17 +16,13 @@ class PaymentController extends Controller
         $payments = Payment::all();
         return response()->json(['message' => 'payments listed successfully', 'payments' => $payments]);
     }
-
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'booking_id' => 'required',
-
-            'payment_method' => 'required|string',
+            'booking_id' => 'required|string',
+            'payment_method' => 'required',
             'file_upload' => 'required|file',
-            'account_title' => 'required|string|min:3|max:75',
-            'account_number' => 'required|integer',
+            'status' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -62,21 +58,13 @@ class PaymentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|string',
-
-            'booking_id' => 'nullable',
-            'payment_method' => 'nullable',
-            'file_upload' => 'nullable',
-            'account_title' => 'nullable',
-            'account_number' => 'nullable',
-
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $payment = Payment::findOrFail($id);
-//        $payment = Payment::where('booking_id', $booking_id)->get();
+        $payment = Payment::where('booking_id', $id)->first();
         $payment->update($request->all());
 
         return response()->json(['message' => 'payment updated successfully', 'payment' => $payment]);

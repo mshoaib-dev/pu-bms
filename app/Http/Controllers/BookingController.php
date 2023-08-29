@@ -14,17 +14,12 @@ class BookingController extends Controller
         $bookings = Booking::all();
         return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
     }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'vehicle_id'=> 'required',
-            'departure_address' => 'nullable',
-            'destination_address' => 'nullable',
-            'phone_no' => 'nullable',
-            'cnic' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -50,9 +45,6 @@ class BookingController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'vehicle_id'=> 'nullable',
             'departure_address' => 'required|regex:/(^[-0-9A-Za-z.,\/ ]+$)/',
             'destination_address' => 'required|regex:/(^[-0-9A-Za-z.,\/ ]+$)/',
             'phone_no' => 'required|numeric|min:11',

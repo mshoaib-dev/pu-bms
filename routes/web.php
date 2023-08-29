@@ -26,5 +26,4 @@ use App\Models\{
 Route::get('/', function () {
     return view('welcome');
 });
-//Route::get('/login', [UserController::class, 'loginroute'])->name('login');
 

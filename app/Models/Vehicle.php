@@ -16,11 +16,6 @@ class Vehicle extends Model
         'no_plate',
         'no_seats',
     ];
-
-//    public function booking()
-//    {
-//        return $this->belongsToMany(Booking::class, 'booking_vehicle');
-//    }
     public function user()
     {
         return $this->belongsToMany(User::class, 'user_vehicle');
