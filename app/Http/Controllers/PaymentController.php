@@ -69,7 +69,6 @@ class PaymentController extends Controller
 
         return response()->json(['message' => 'payment updated successfully', 'payment' => $payment]);
     }
-
     public function destroy($id)
     {
         Payment::findOrFail($id)->delete();
