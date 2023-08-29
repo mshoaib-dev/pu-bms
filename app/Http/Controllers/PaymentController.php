@@ -47,7 +47,6 @@ class PaymentController extends Controller
             201);
 
     }
-
     public function show($booking_id)
     {
         $payment = Payment::where('booking_id', $booking_id)->get();
