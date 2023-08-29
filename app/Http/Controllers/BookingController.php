@@ -5,22 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use function Termwind\renderUsing;
 
 class BookingController extends Controller
 
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::all();
-        return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
+        if ($request->user('api')->type === 'admin') {
+            $bookings = Booking::all();
+            return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
+        } else
+            return response()->json(['message' => 'You are NOT admin!']);
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
 
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'vehicle_id'=> 'required',
+            'vehicle_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -37,10 +42,14 @@ class BookingController extends Controller
             'message' => 'booking created successfully', 'booking' => $booking],
             201);
     }
-    public function show($id)
+
+    public function show(Request $request, $id)
     {
-        $booking = Booking::findOrFail($id);
-        return response()->json(['message' => 'booking listed successfully', 'booking' => $booking]);
+        if ($request->user('api')->type === 'customer' && $request->user('api')->id == $id) {
+            $bookings = Booking::all()->where('user_id', $id);
+            return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
+        } else
+            return response()->json(['message' => 'Wrong Input']);
     }
 
     public function update(Request $request, $id)
@@ -59,6 +68,7 @@ class BookingController extends Controller
         $booking->update($request->all());
         return response()->json(['message' => 'booking updated successfully', 'booking' => $booking]);
     }
+
     public function destroy($id)
     {
         Booking::findOrFail($id)->delete();
