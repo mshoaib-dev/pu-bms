@@ -65,7 +65,6 @@ class UserController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-
 // Driver CRUD
     public function index()
     {
