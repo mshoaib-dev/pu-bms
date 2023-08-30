@@ -5,18 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Booking;
-use function Termwind\renderUsing;
 
 class BookingController extends Controller
 
 {
+    public function allBookings()
+    {
+        $bookings = Booking::all();
+        return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
+    }
+
     public function index(Request $request)
     {
         if ($request->user('api')->type === 'admin') {
             $bookings = Booking::all();
             return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
         } else
-            return response()->json(['message' => 'You are NOT admin!']);
+            return response()->json(['message' => 'not authorized']);
     }
 
     public function store(Request $request)
@@ -46,10 +51,10 @@ class BookingController extends Controller
     public function show(Request $request, $id)
     {
         if ($request->user('api')->type === 'customer' && $request->user('api')->id == $id) {
-            $bookings = Booking::all()->where('user_id', $id);
+            $bookings = Booking::where('user_id', $id)->get();
             return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
         } else
-            return response()->json(['message' => 'Wrong Input']);
+            return response()->json(['message' => 'invalid user']);
     }
 
     public function update(Request $request, $id)
