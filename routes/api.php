@@ -26,6 +26,7 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth.api'
 Route::middleware('auth.api')->group(function () {
 
     Route::get('/bookings/all-bookings', [BookingController::class, 'allBookings']);
+    Route::get('/bookings/filter-bookings', [BookingController::class, 'filterBookings']);
     Route::post('/bookings/{id}', [BookingController::class, 'update']);
     Route::post('/payments/{id}', [PaymentController::class, 'update']);
     Route::post('/vehicles/{id}', [VehicleController::class, 'update']);
