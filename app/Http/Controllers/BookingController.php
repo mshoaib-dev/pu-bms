@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Booking;
@@ -9,16 +10,41 @@ use App\Models\Booking;
 class BookingController extends Controller
 
 {
-    public function allBookings()
+
+    public function allBookings(Request $request)
     {
-        $bookings = Booking::all();
+
+        $bookings = Booking::paginate(1);
+        return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
+    }
+
+    public function filterBookings(Request $request)
+    {
+
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $bookings = Booking::whereBetween('start_date', [$startDate, $endDate])->get();
+
+
+//        $bookings = Booking::all();
+
         return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
     }
 
     public function index(Request $request)
     {
         if ($request->user('api')->type === 'admin') {
-            $bookings = Booking::all();
+            $bookings = Booking::paginate(3);
             return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
         } else
             return response()->json(['message' => 'not authorized']);
