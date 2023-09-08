@@ -38,6 +38,7 @@ class BookingController extends Controller
 
 //        $bookings = Booking::all();
 
+
         return response()->json(['message' => 'bookings listed successfully', 'bookings' => $bookings]);
     }
 
